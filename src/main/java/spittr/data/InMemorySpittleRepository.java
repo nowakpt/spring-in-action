@@ -20,4 +20,13 @@ public class InMemorySpittleRepository implements SpittleRepository {
 	public List<Spittle> findSpittles(long max, int count) {
 		return spittles;
 	}
+
+	@Override
+	public Spittle findOne(long id) {
+		for (Spittle s : spittles)
+		{
+			if (Long.valueOf(id).equals(s.getId())) return s;
+		}
+		return null;
+	}
 }
