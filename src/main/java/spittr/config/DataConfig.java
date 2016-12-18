@@ -3,9 +3,7 @@ package spittr.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import spittr.data.JdbcSpitterRepository;
 import spittr.data.JdbcSpittleRepository;
 import spittr.data.SpitterRepository;
@@ -17,14 +15,13 @@ import javax.sql.DataSource;
 public class DataConfig {
 
 	@Bean
-	public DataSource dataSource() {
-		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		EmbeddedDatabase database = builder
-				.setType(EmbeddedDatabaseType.H2)
-				.addScript("db/sql/create_db.sql")
-				.addScript("db/sql/load_sample_data.sql")
-				.build();
-		return database;
+	public DataSource dataSource() throws ClassNotFoundException {
+		Class.forName("com.mysql.jdbc.Driver");
+		return new DriverManagerDataSource(
+				"jdbc:mysql://localhost:3306/spittr",
+				"spittr",
+				"change-me" // todo move password to some external config file
+		);
 	}
 
 	@Bean
